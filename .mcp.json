@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "hpo": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--project",
+        "${CLAUDE_PLUGIN_ROOT}/server",
+        "python",
+        "${CLAUDE_PLUGIN_ROOT}/server/hpo_server.py"
+      ]
+    },
+    "pubmed": {
+      "command": "npx",
+      "args": ["-y", "@cyanheads/pubmed-mcp-server@2.7.4"],
+      "env": {
+        "MCP_TRANSPORT_TYPE": "stdio",
+        "MCP_LOG_LEVEL": "silent",
+        "LOG_LEVEL": "silent",
+        "PINO_LOG_LEVEL": "silent"
+      }
+    }
+  }
+}

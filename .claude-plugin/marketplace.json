@@ -1,0 +1,17 @@
+{
+  "name": "rare-disease-consult",
+  "owner": {
+    "name": "Bryan Chan",
+    "url": "https://github.com/fryanpan"
+  },
+  "plugins": [
+    {
+      "name": "rare-disease-consult",
+      "source": "./",
+      "description": "Structured rare disease differential diagnosis using Claude with live HPO and PubMed lookup. A single agent extracts clinical features, maps them to HPO terms, looks up candidate diseases by phenotype, and queries PubMed for similar cases. Produces a grounded top-5 differential.",
+      "version": "0.1.0",
+      "category": "medical",
+      "keywords": ["rare-disease", "diagnosis", "medical", "hpo", "pubmed", "differential-diagnosis"]
+    }
+  ]
+}
