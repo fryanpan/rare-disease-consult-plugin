@@ -17,6 +17,7 @@ Tools exposed:
 
 import json
 import socket
+import ssl
 import sys
 from typing import Any
 
@@ -43,6 +44,17 @@ except ImportError:
 # NLM Clinical Tables API (for fuzzy symptom → HPO term lookup)
 import urllib.parse
 import urllib.request
+
+import certifi
+
+# The Python that `uv` provisions is a python-build-standalone build whose OpenSSL
+# is compiled to look for a CA bundle at /etc/ssl/cert.pem. That path is absent on
+# stock macOS (the system trust store lives in the Keychain, which OpenSSL can't
+# read), so HTTPS verification against the NLM endpoint fails on a clean install
+# with "CERTIFICATE_VERIFY_FAILED: unable to get local issuer certificate". Build
+# the TLS context from certifi's bundled CA set so verification works everywhere,
+# regardless of what the host happens to have on disk.
+_SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
 
 
 mcp = FastMCP("hpo-disease-mapper")
@@ -71,7 +83,7 @@ def search_hpo_terms(query: str, max_results: int = 10) -> str:
     )
     try:
         req = urllib.request.Request(url, headers={"User-Agent": "hpo-mcp-server/1.0"})
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        with urllib.request.urlopen(req, timeout=10, context=_SSL_CONTEXT) as resp:
             data = json.loads(resp.read().decode())
     except Exception as e:
         return json.dumps({"error": str(e)})
@@ -231,7 +243,7 @@ def phenotype_differential_diagnosis(
         )
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "hpo-mcp-server/1.0"})
-            with urllib.request.urlopen(req, timeout=10) as resp:
+            with urllib.request.urlopen(req, timeout=10, context=_SSL_CONTEXT) as resp:
                 data = json.loads(resp.read().decode())
             if data[1] and len(data) > 3 and data[3]:
                 code, name = data[3][0][0], data[3][0][1]

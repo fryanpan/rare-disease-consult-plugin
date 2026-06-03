@@ -14,9 +14,9 @@ Before you do anything else, tell the user this — verbatim:
 >
 > Use this for an **informed conversation with your doctor**, not as a replacement for one.
 >
-> Ready to continue?
+> Ready to continue? Just reply here to confirm.
 
-Wait for the user to acknowledge before installing.
+Wait for the user to acknowledge before installing. They acknowledge by **replying in the chat** (e.g. "yes" / "continue") — this is an ordinary conversational turn. There is no button, checkbox, dialog, or other UI element for the disclaimer; do **not** tell the user to click, check, or acknowledge anything in a UI. Present the text above and wait for their typed reply.
 
 ## Verify prerequisites
 
