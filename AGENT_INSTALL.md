@@ -14,9 +14,9 @@ Before you do anything else, tell the user this — verbatim:
 >
 > Use this for an **informed conversation with your doctor**, not as a replacement for one.
 >
-> Ready to continue? Just reply here to confirm.
+> Ready to continue?
 
-Wait for the user to acknowledge before installing. They acknowledge by **replying in the chat** (e.g. "yes" / "continue") — this is an ordinary conversational turn. There is no button, checkbox, dialog, or other UI element for the disclaimer; do **not** tell the user to click, check, or acknowledge anything in a UI. Present the text above and wait for their typed reply.
+Wait for the user to acknowledge before installing — a typed reply in the chat (e.g. "yes") is all it takes. There's no button or dialog for this step.
 
 ## Verify prerequisites
 
@@ -50,19 +50,19 @@ If the user is on Windows or otherwise can't install one of these, **stop and ex
 
 ## Hand off the install to the user
 
-You are **not** editing `.claude/settings.local.json`, `.claude/settings.json`, or any file under `~/.claude/` on the user's behalf. Plugin install is intentionally a user-confirmed action in Claude Code — the user clicking through the `/plugin` UI is the supported path, and trying to short-circuit it via direct settings writes both trips the auto-mode safety classifier *and* leaves the install half-registered. Your role stops at telling the user what to do.
+You are **not** editing `.claude/settings.local.json`, `.claude/settings.json`, or any file under `~/.claude/` on the user's behalf. Plugin install is intentionally a user-confirmed action in Claude Code — the user clicking through the **plugin manager** (Claude Code's `/plugin` interface) is the supported path, and trying to short-circuit it via direct settings writes both trips the auto-mode safety classifier *and* leaves the install half-registered. Your role stops at telling the user what to do.
 
 Tell the user, verbatim or close to it:
 
-> Prerequisites are good. The rest of the install is in Claude Code's `/plugin` UI — I'll walk you through it but you'll be the one clicking. Plugin code runs on your data, so the install is intentionally yours to confirm.
+> Prerequisites are good. The rest of the install happens in Claude Code's **plugin manager** — the interactive screen that opens when you run `/plugin`. I'll walk you through it but you'll be the one clicking. Plugin code runs on your data, so the install is intentionally yours to confirm.
 >
-> **Step 1 — open the plugin UI.** In this Claude Code session, run:
+> **Step 1 — open the plugin manager.** In this Claude Code session, run:
 >
 > ```
 > /plugin
 > ```
 >
-> A UI opens with tabs across the top: `Plugins | Discover | Installed | Marketplaces | Errors`. Use the keys shown in the footer: **Enter** to select, **Esc** to go back, **u** to update, **d** to remove.
+> The plugin manager opens — a full-screen interactive panel with tabs across the top: `Plugins | Discover | Installed | Marketplaces | Errors`. Use the keys shown in the footer: **Enter** to select, **Esc** to go back, **u** to update, **d** to remove. If `/plugin` says *unknown command* or nothing opens at all, your Claude Code is too old — update it and run `/plugin` again.
 >
 > **Step 2 — add the marketplace.** Switch to the **`Marketplaces`** tab. At the top of the list there's a row labeled **`+ Add Marketplace`** — select it and paste this as the source when prompted:
 >
@@ -91,7 +91,7 @@ claude plugin list 2>&1 | grep rare-disease
 The plugin should appear with status enabled. The marketplace name in the listing is auto-assigned by Claude Code from the source repo (typically `rare-disease-consult-plugin` or a similar derived name); whatever appears is fine.
 
 If the plugin doesn't appear:
-- Ask what the user saw in the `/plugin` UI — was there an error message? Did the marketplace-add step complete? Did the install step show the green checkmark?
+- Ask what the user saw in the plugin manager — was there an error message? Did the marketplace-add step complete? Did the install step show the green checkmark?
 - Common case: the marketplace gets added but the install step needs a second click. Have the user run `/plugin`, switch to the `Plugins` tab or the marketplace listing, find `rare-disease-consult`, and confirm it shows as installed/enabled before retrying the reload.
 
 Once `claude plugin list` shows it enabled, tell the user:
@@ -133,7 +133,7 @@ You've finished when ALL of these are true:
 - [ ] The user has acknowledged the disclaimer
 - [ ] `uv` is installed and on PATH
 - [ ] `node` and `npx` are installed and on PATH
-- [ ] The user added `fryanpan/rare-disease-consult-plugin` as a marketplace via the `/plugin` UI (Marketplaces tab → `+ Add Marketplace`)
-- [ ] The user installed `rare-disease-consult` from that marketplace via the `/plugin` UI (transcript shows `✓ Installed rare-disease-consult. Run /reload-plugins to apply.`)
+- [ ] The user added `fryanpan/rare-disease-consult-plugin` as a marketplace via the plugin manager (Marketplaces tab → `+ Add Marketplace`)
+- [ ] The user installed `rare-disease-consult` from that marketplace via the plugin manager (transcript shows `✓ Installed rare-disease-consult. Run /reload-plugins to apply.`)
 - [ ] The user ran `/reload-plugins` (or restarted Claude Code) and `claude plugin list` shows `rare-disease-consult` as enabled
 - [ ] The user has been pointed at the README's "Risks worth taking seriously" section
