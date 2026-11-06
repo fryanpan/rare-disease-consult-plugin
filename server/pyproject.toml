@@ -7,4 +7,8 @@ dependencies = [
     "mcp>=1.30.0,<2",
     "pyhpo>=4.0.0",
     "certifi>=2024.2.2",
+    # cryptography 49+ ships no Intel macOS wheel, so a clean install there would
+    # need a Rust toolchain. Intel Macs stay on 48.x until that changes.
+    "cryptography>=50.0.0; sys_platform != 'darwin' or platform_machine != 'x86_64'",
+    "cryptography>=48.0.1,<49; sys_platform == 'darwin' and platform_machine == 'x86_64'",
 ]
