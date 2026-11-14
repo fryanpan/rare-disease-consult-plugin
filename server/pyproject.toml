@@ -7,8 +7,11 @@ dependencies = [
     "mcp>=1.30.0,<2",
     "pyhpo>=4.0.0",
     "certifi>=2024.2.2",
-    # cryptography 49+ ships no Intel macOS wheel, so a clean install there would
-    # need a Rust toolchain. Intel Macs stay on 48.x until that changes.
-    "cryptography>=50.0.0; sys_platform != 'darwin' or platform_machine != 'x86_64'",
-    "cryptography>=48.0.1,<49; sys_platform == 'darwin' and platform_machine == 'x86_64'",
 ]
+
+[tool.uv]
+# mcp requires pyjwt[crypto], which pulls in cryptography. Only mcp's OAuth
+# client code imports jwt, and this stdio server never loads it. Dropping the
+# extra removes cryptography, whose patched releases (49+) ship no Intel macOS
+# wheel.
+override-dependencies = ["pyjwt>=2.15.0"]
